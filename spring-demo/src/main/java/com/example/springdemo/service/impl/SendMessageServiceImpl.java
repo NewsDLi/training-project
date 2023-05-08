@@ -2,9 +2,11 @@ package com.example.springdemo.service.impl;
 
 import com.example.springdemo.service.SendMessageService;
 import com.example.springdemo.service.strategy.SendMessageStrategyService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,6 +16,14 @@ public class SendMessageServiceImpl implements SendMessageService {
 
     @Autowired
     private List<SendMessageStrategyService> sendMessageStrategyServices;
+
+    private static Map<String, SendMessageStrategyService> map = null;
+
+    @PostConstruct
+    public void getMap() {
+        map = sendMessageStrategyServices.stream().collect(Collectors.toMap(k -> k.getType(), v -> v, (v1, v2) -> v2));
+    }
+
 
     /**
      * 消息发送
@@ -25,7 +35,8 @@ public class SendMessageServiceImpl implements SendMessageService {
     @Override
     public String sendMessage(String message, String type) {
         Map<String, SendMessageStrategyService> sendMessageStrategyMap = sendMessageStrategyServices.stream().filter(s -> s.getType().equals(type)).collect(Collectors.toMap(k -> k.getType(), v -> v, (v1, v2) -> v2));
-        SendMessageStrategyService sendMessageStrategyService = sendMessageStrategyMap.get(type);
+//        SendMessageStrategyService sendMessageStrategyService = sendMessageStrategyMap.get(type);
+        SendMessageStrategyService sendMessageStrategyService = map.get(type);
         if (null == sendMessageStrategyService) {
             return "fail";
         }
