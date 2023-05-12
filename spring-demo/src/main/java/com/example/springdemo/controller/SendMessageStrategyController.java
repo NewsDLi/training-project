@@ -19,4 +19,16 @@ public class SendMessageStrategyController {
         String result = sendMessageService.sendMessage(message, type);
         return result;
     }
+
+    @GetMapping("/sendMessage2")
+    public String sendMessage2(@RequestParam("message") String message, @RequestParam("type") String type) {
+        String result = sendMessageService.sendMessage(message, type);
+        sendMessage3(result);
+        return result;
+    }
+
+    private void sendMessage3(String result) {
+        System.out.println("==============");
+        System.out.println(result);
+    }
 }
