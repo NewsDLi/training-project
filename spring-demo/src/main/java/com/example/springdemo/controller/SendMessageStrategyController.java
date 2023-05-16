@@ -1,5 +1,7 @@
 package com.example.springdemo.controller;
 
+import com.example.springdemo.annotation.LogLevel;
+import com.example.springdemo.annotation.LogLevelType;
 import com.example.springdemo.service.SendMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ public class SendMessageStrategyController {
     @Autowired
     private SendMessageService sendMessageService;
 
+    @LogLevel(LogLevelType.DEBUG)
     @GetMapping("/sendMessage")
     public String sendMessage(@RequestParam("message") String message, @RequestParam("type") String type) {
         String result = sendMessageService.sendMessage(message, type);
